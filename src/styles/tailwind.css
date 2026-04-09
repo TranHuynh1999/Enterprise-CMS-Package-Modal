@@ -1,0 +1,17 @@
+@import 'tailwindcss' source(none);
+@source '../**/*.{js,ts,jsx,tsx}';
+
+@import 'tw-animate-css';
+
+@theme {
+  --color-brand-50: #e8f1f8;
+  --color-brand-100: #c5dced;
+  --color-brand-200: #9ec5e0;
+  --color-brand-300: #74abd2;
+  --color-brand-400: #5393c4;
+  --color-brand-500: #337ab7;
+  --color-brand-600: #2c6da5;
+  --color-brand-700: #235a8a;
+  --color-brand-800: #1b4770;
+  --color-brand-900: #123456;
+}
