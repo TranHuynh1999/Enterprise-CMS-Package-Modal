@@ -261,7 +261,8 @@ export function CMSPackageSetupModal({ onClose }: { onClose: () => void }) {
                     CMS Package Setup
                   </h2>
                   <p className="text-sm text-gray-500">
-                    Select and subscribe to professional services for your server
+                    Select and subscribe to professional services for your
+                    server
                   </p>
                 </div>
               </div>
@@ -687,20 +688,14 @@ export function CMSPackageSetupModal({ onClose }: { onClose: () => void }) {
                               <span className="font-semibold text-sm text-gray-900 truncate">
                                 {feature.name}
                               </span>
-                              {feature.renewal && (
-                                <span className="flex-shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-700 border border-emerald-200">
-                                  <Check className="w-2.5 h-2.5 mr-0.5" />
-                                  Renewal
-                                </span>
-                              )}
                             </h4>
-                            <div className="flex items-center gap-2 mt-1">
+                            {/* <div className="flex items-center gap-2 mt-1">
                               {feature.discount > 0 && (
                                 <span className="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-orange-100 text-orange-700">
                                   -{feature.discount}%
                                 </span>
                               )}
-                            </div>
+                            </div> */}
                           </div>
                           <button
                             onClick={() => handleRemoveFeature(feature.id)}
@@ -711,7 +706,15 @@ export function CMSPackageSetupModal({ onClose }: { onClose: () => void }) {
                         </div>
                         <div className="space-y-1 text-xs">
                           <div className="flex items-center justify-between">
-                            <span className="text-gray-600">Setup</span>
+                            <span className="text-gray-600">
+                              Setup
+                              {feature.renewal && (
+                                <span className="ml-1.5 flex-shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-700 border border-emerald-200">
+                                  <Check className="w-2.5 h-2.5 mr-0.5" />
+                                  Renewal
+                                </span>
+                              )}
+                            </span>
                             <span className="font-medium text-gray-700">
                               $
                               {getFeaturePricing(
@@ -720,7 +723,14 @@ export function CMSPackageSetupModal({ onClose }: { onClose: () => void }) {
                             </span>
                           </div>
                           <div className="flex items-center justify-between">
-                            <span className="text-gray-600">Annual</span>
+                            <span className="text-gray-600">
+                              Annual
+                              {feature.discount > 0 && (
+                                <span className="ml-1.5 inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-orange-100 text-orange-700">
+                                  -{feature.discount}%
+                                </span>
+                              )}
+                            </span>
                             <span className="font-medium text-gray-700">
                               $
                               {getFeaturePricing(
