@@ -44,7 +44,7 @@ const FEATURES: Feature[] = [
     description:
       "Annual: i3Host Advanced Site Management. Single sign-on, NVR health monitor, application management, per server.",
     pricing: {
-      "i3Ai": { setupFee: 500, annualFee: 2499 },
+      i3Ai: { setupFee: 500, annualFee: 2499 },
       "i3Ai Cloud": { setupFee: 750, annualFee: 2999 },
     },
     icon: "server",
@@ -56,7 +56,7 @@ const FEATURES: Feature[] = [
     description:
       "Annual: Video Streaming, per server/ 10GB Streaming/month; Total 50GB Cloud storage. Streaming overages billed monthly.",
     pricing: {
-      "i3Ai": { setupFee: 200, annualFee: 899 },
+      i3Ai: { setupFee: 200, annualFee: 899 },
       "i3Ai Cloud": { setupFee: 350, annualFee: 1199 },
     },
     icon: "package",
@@ -68,7 +68,7 @@ const FEATURES: Feature[] = [
     description:
       "Annual: Video Streaming Relay, mthly Max 10GB Live/Search/Backup",
     pricing: {
-      "i3Ai": { setupFee: 300, annualFee: 1299 },
+      i3Ai: { setupFee: 300, annualFee: 1299 },
       "i3Ai Cloud": { setupFee: 450, annualFee: 1599 },
     },
     icon: "chart",
@@ -80,7 +80,7 @@ const FEATURES: Feature[] = [
     description:
       "Annual: Process POS data (TLOG, TCP/IP, Serial), store securely on the Cloud. Req'd for ER and DM.",
     pricing: {
-      "i3Ai": { setupFee: 150, annualFee: 699 },
+      i3Ai: { setupFee: 150, annualFee: 699 },
       "i3Ai Cloud": { setupFee: 250, annualFee: 899 },
     },
     icon: "activity",
@@ -89,10 +89,9 @@ const FEATURES: Feature[] = [
   {
     id: "pacdm",
     name: "PACDM",
-    description:
-      "Annual: Provide POS Data Analysis, per server",
+    description: "Annual: Provide POS Data Analysis, per server",
     pricing: {
-      "i3Ai": { setupFee: 350, annualFee: 1599 },
+      i3Ai: { setupFee: 350, annualFee: 1599 },
       "i3Ai Cloud": { setupFee: 500, annualFee: 1999 },
     },
     icon: "alert",
@@ -104,7 +103,7 @@ const FEATURES: Feature[] = [
     description:
       "Annual: CMS Audit weekly report, incl. CMS-HM (VaaS ONLY), per site",
     pricing: {
-      "i3Ai": { setupFee: 400, annualFee: 1899 },
+      i3Ai: { setupFee: 400, annualFee: 1899 },
       "i3Ai Cloud": { setupFee: 600, annualFee: 2299 },
     },
     icon: "cloud",
@@ -116,7 +115,7 @@ const FEATURES: Feature[] = [
     description:
       "Annual: Data mining/analysis & Ai: business intelligence processes to analyze sales data & customers to improve sales outcomes",
     pricing: {
-      "i3Ai": { setupFee: 450, annualFee: 2199 },
+      i3Ai: { setupFee: 450, annualFee: 2199 },
       "i3Ai Cloud": { setupFee: 650, annualFee: 2699 },
     },
     icon: "zap",
@@ -127,7 +126,7 @@ const FEATURES: Feature[] = [
     name: "CB",
     description: "Annual: Concierge Tech Service, per server",
     pricing: {
-      "i3Ai": { setupFee: 200, annualFee: 999 },
+      i3Ai: { setupFee: 200, annualFee: 999 },
       "i3Ai Cloud": { setupFee: 350, annualFee: 1299 },
     },
     icon: "globe",
@@ -135,10 +134,7 @@ const FEATURES: Feature[] = [
   },
 ];
 
-const AI_MODES = [
-  "i3Ai",
-  "i3Ai Cloud",
-];
+const AI_MODES = ["i3Ai", "i3Ai Cloud"];
 
 const CATEGORIES = [
   "All",
@@ -150,17 +146,11 @@ const CATEGORIES = [
   "Concierge",
 ];
 
-export function CMSPackageSetupModal({
-  onClose,
-}: {
-  onClose: () => void;
-}) {
-  const [selectedFeatures, setSelectedFeatures] = useState<
-    SelectedFeature[]
-  >([]);
-  const [activeFeatureId, setActiveFeatureId] = useState<
-    string | null
-  >(null);
+export function CMSPackageSetupModal({ onClose }: { onClose: () => void }) {
+  const [selectedFeatures, setSelectedFeatures] = useState<SelectedFeature[]>(
+    [],
+  );
+  const [activeFeatureId, setActiveFeatureId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All");
   const [packageId, setPackageId] = useState("CMS-01001");
@@ -172,19 +162,13 @@ export function CMSPackageSetupModal({
   // const oneTimeSetupFee = 1500;
   // const posSetupFee = 750;
 
-  const activeFeature = selectedFeatures.find(
-    (f) => f.id === activeFeatureId,
-  );
+  const activeFeature = selectedFeatures.find((f) => f.id === activeFeatureId);
 
   const handleFeatureSelect = (feature: Feature) => {
-    const isSelected = selectedFeatures.some(
-      (f) => f.id === feature.id,
-    );
+    const isSelected = selectedFeatures.some((f) => f.id === feature.id);
 
     if (isSelected) {
-      setSelectedFeatures(
-        selectedFeatures.filter((f) => f.id !== feature.id),
-      );
+      setSelectedFeatures(selectedFeatures.filter((f) => f.id !== feature.id));
       if (activeFeatureId === feature.id) {
         setActiveFeatureId(null);
       }
@@ -207,16 +191,12 @@ export function CMSPackageSetupModal({
     updates: Partial<SelectedFeature>,
   ) => {
     setSelectedFeatures(
-      selectedFeatures.map((f) =>
-        f.id === id ? { ...f, ...updates } : f,
-      ),
+      selectedFeatures.map((f) => (f.id === id ? { ...f, ...updates } : f)),
     );
   };
 
   const handleRemoveFeature = (id: string) => {
-    setSelectedFeatures(
-      selectedFeatures.filter((f) => f.id !== id),
-    );
+    setSelectedFeatures(selectedFeatures.filter((f) => f.id !== id));
     if (activeFeatureId === id) {
       setActiveFeatureId(null);
     }
@@ -224,9 +204,9 @@ export function CMSPackageSetupModal({
 
   const getFeaturePricing = (feature: SelectedFeature) => {
     const pricing = feature.pricing[feature.aiMode] ?? feature.pricing["i3Ai"];
-    const setupFee = feature.renewal ? 0 : pricing.setupFee * feature.quantity;
+    const setupFee = feature.renewal ? 0 : pricing.setupFee;
     const annualWithDiscount = pricing.annualFee * (1 - feature.discount / 100);
-    const annualFee = annualWithDiscount * feature.quantity;
+    const annualFee = annualWithDiscount;
     return {
       setupFee,
       annualFee,
@@ -239,31 +219,27 @@ export function CMSPackageSetupModal({
   };
 
   const totalFeatureSetup = selectedFeatures.reduce(
-    (sum, f) => sum + getFeaturePricing(f).setupFee, 0,
-  );
-
-  const annualPayment = selectedFeatures
-    .reduce((sum, f) => sum + getFeaturePricing(f).annualFee, 0);
-
-  const totalDiscount = selectedFeatures.reduce(
-    (sum, f) => {
-      const pricing = f.pricing[f.aiMode] ?? f.pricing["i3Ai"];
-      return sum + (pricing.annualFee * f.quantity * f.discount) / 100;
-    },
+    (sum, f) => sum + getFeaturePricing(f).setupFee,
     0,
   );
 
-  const grandTotal =
-    totalFeatureSetup + annualPayment - totalDiscount;
+  const annualPayment = selectedFeatures.reduce(
+    (sum, f) => sum + getFeaturePricing(f).annualFee,
+    0,
+  );
+
+  const totalDiscount = selectedFeatures.reduce((sum, f) => {
+    const pricing = f.pricing[f.aiMode] ?? f.pricing["i3Ai"];
+    return sum + (pricing.annualFee * f.discount) / 100;
+  }, 0);
+
+  const packageSubtotal = totalFeatureSetup + annualPayment - totalDiscount;
+  const grandTotal = packageSubtotal * packageQuantity;
 
   const filteredFeatures = FEATURES.filter((f) => {
     const matchesSearch =
-      f.name
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase()) ||
-      f.description
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase());
+      f.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      f.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory =
       categoryFilter === "All" || f.category === categoryFilter;
     return matchesSearch && matchesCategory;
@@ -273,63 +249,101 @@ export function CMSPackageSetupModal({
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-[1200px] max-h-[90vh] flex flex-col">
         {/* Fixed Header */}
-        <div className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
+        <div className="border-b border-gray-200 bg-white">
           <div className="p-6">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-                  CMS Package Setup
-                </h2>
-                <div className="grid grid-cols-4 gap-4">
-                  <div>
-                    <label className="block text-xs font-medium text-gray-600 mb-1">
-                      Model
-                    </label>
-                    <select
-                      value={model}
-                      onChange={(e) => setModel(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
-                    >
-                      <option>U16</option>
-                      <option>U21</option>
-                      <option>U31</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-xs font-medium text-gray-600 mb-1">
-                      Package ID
-                    </label>
-                    <div className="relative">
-                      <input
-                        type="text"
-                        value={packageId}
-                        onChange={(e) =>
-                          setPackageId(e.target.value)
-                        }
-                        className="w-full pl-3 pr-9 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
-                      />
-                      <Search className="absolute right-3 top-2.5 w-4 h-4 text-gray-400" />
-                    </div>
-                  </div>
-                  <div className="col-span-2">
-                    <label className="block text-xs font-medium text-gray-600 mb-1">
-                      Description
-                    </label>
-                    <input
-                      type="text"
-                      value={description}
-                      readOnly
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-gray-50 text-gray-700 cursor-default focus:outline-none"
-                    />
-                  </div>
+            <div className="flex items-start justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 bg-brand-50 rounded-xl">
+                  <Package className="w-6 h-6 text-brand-600" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-gray-900 leading-tight">
+                    CMS Package Setup
+                  </h2>
+                  <p className="text-sm text-gray-500">
+                    Select and subscribe to professional services for your server
+                  </p>
                 </div>
               </div>
+
               <button
                 onClick={onClose}
-                className="ml-4 p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-2 hover:bg-gray-100 rounded-full transition-all text-gray-400 hover:text-gray-600"
               >
-                <X className="w-5 h-5 text-gray-500" />
+                <X className="w-5 h-5" />
               </button>
+            </div>
+
+            <div className="grid grid-cols-12 gap-5 items-end">
+              <div className="col-span-2">
+                <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">
+                  Model
+                </label>
+                <select
+                  value={model}
+                  onChange={(e) => setModel(e.target.value)}
+                  className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm font-medium focus:ring-2 focus:ring-brand-500 focus:bg-white transition-all outline-none"
+                >
+                  <option>U16</option>
+                  <option>U21</option>
+                  <option>U31</option>
+                </select>
+              </div>
+
+              <div className="col-span-3">
+                <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">
+                  Package ID
+                </label>
+                <div className="relative group">
+                  <input
+                    type="text"
+                    value={packageId}
+                    onChange={(e) => setPackageId(e.target.value)}
+                    placeholder="Search ID..."
+                    className="w-full pl-3 pr-10 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-500 outline-none transition-all"
+                  />
+                  <Search className="absolute right-3 top-2.5 w-4 h-4 text-gray-400 group-focus-within:text-brand-500 transition-colors" />
+                </div>
+              </div>
+
+              <div className="col-span-2">
+                <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">
+                  Package Qty
+                </label>
+                <div className="flex -space-x-px">
+                  <button
+                    onClick={() =>
+                      setPackageQuantity(Math.max(1, packageQuantity - 1))
+                    }
+                    className="px-2.5 border border-gray-300 rounded-l-lg hover:bg-gray-50 active:bg-gray-100 transition-colors"
+                  >
+                    <Minus className="w-3.5 h-3.5" />
+                  </button>
+                  <input
+                    type="number"
+                    value={packageQuantity}
+                    className="w-full py-2 text-center border-y border-gray-300 text-sm font-semibold focus:outline-none focus:z-10 focus:ring-1 focus:ring-brand-500"
+                    onChange={(e) =>
+                      setPackageQuantity(Math.max(1, Number(e.target.value)))
+                    }
+                  />
+                  <button
+                    onClick={() => setPackageQuantity(packageQuantity + 1)}
+                    className="px-2.5 border border-gray-300 rounded-r-lg hover:bg-gray-50 active:bg-gray-100 transition-colors"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+
+              <div className="col-span-5">
+                <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">
+                  Description
+                </label>
+                <div className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-600 italic">
+                  {description || "No description available"}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -345,9 +359,7 @@ export function CMSPackageSetupModal({
                   type="text"
                   placeholder="Search features..."
                   value={searchQuery}
-                  onChange={(e) =>
-                    setSearchQuery(e.target.value)
-                  }
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
                 />
               </div>
@@ -395,9 +407,7 @@ export function CMSPackageSetupModal({
                       <input
                         type="checkbox"
                         checked={isSelected}
-                        onChange={() =>
-                          handleFeatureSelect(feature)
-                        }
+                        onChange={() => handleFeatureSelect(feature)}
                         className="mt-1 w-4 h-4 text-brand-500 rounded focus:ring-2 focus:ring-brand-500"
                       />
                       <div className="flex-1 min-w-0">
@@ -411,13 +421,9 @@ export function CMSPackageSetupModal({
                           {feature.icon === "zap" && (
                             <Zap className="w-4 h-4 text-yellow-600" />
                           )}
-                          {![
-                            "server",
-                            "package",
-                            "zap",
-                          ].includes(feature.icon) && (
-                            <Settings className="w-4 h-4 text-gray-600" />
-                          )}
+                          {!["server", "package", "zap"].includes(
+                            feature.icon,
+                          ) && <Settings className="w-4 h-4 text-gray-600" />}
                           <h4 className="font-semibold text-sm text-gray-900">
                             {feature.name}
                           </h4>
@@ -447,8 +453,8 @@ export function CMSPackageSetupModal({
                   No Feature Selected
                 </h3>
                 <p className="text-sm text-gray-600 max-w-sm">
-                  Select a feature from the left panel to
-                  configure its settings, pricing, and options.
+                  Select a feature from the left panel to configure its
+                  settings, pricing, and options.
                 </p>
               </div>
             ) : (
@@ -466,9 +472,7 @@ export function CMSPackageSetupModal({
                     )}
                     {!["server", "package", "zap"].includes(
                       activeFeature.icon,
-                    ) && (
-                      <Settings className="w-6 h-6 text-gray-600" />
-                    )}
+                    ) && <Settings className="w-6 h-6 text-gray-600" />}
                     <h3 className="text-2xl font-semibold text-gray-900">
                       {activeFeature.name}
                     </h3>
@@ -478,7 +482,7 @@ export function CMSPackageSetupModal({
                   </p>
                 </div>
 
-                <div className="space-y-6">
+                <div className="space-y-4">
                   {/* Renewal Toggle */}
                   <div className="bg-gray-50 rounded-xl p-5 border border-gray-200">
                     <div className="flex items-center justify-between">
@@ -488,20 +492,17 @@ export function CMSPackageSetupModal({
                           Annual Renewal
                         </label>
                         <p className="text-xs text-gray-600 mt-1">
-                           Enable for renewal items to waive one-time setup fees.
+                          Enable for renewal items to waive one-time setup fees.
                         </p>
                       </div>
                       <button
                         onClick={() =>
-                          handleUpdateFeature(
-                            activeFeature.id,
-                            { renewal: !activeFeature.renewal },
-                          )
+                          handleUpdateFeature(activeFeature.id, {
+                            renewal: !activeFeature.renewal,
+                          })
                         }
                         className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors ${
-                          activeFeature.renewal
-                            ? "bg-brand-500"
-                            : "bg-gray-300"
+                          activeFeature.renewal ? "bg-brand-500" : "bg-gray-300"
                         }`}
                       >
                         <span
@@ -524,10 +525,9 @@ export function CMSPackageSetupModal({
                       <select
                         value={activeFeature.aiMode}
                         onChange={(e) =>
-                          handleUpdateFeature(
-                            activeFeature.id,
-                            { aiMode: e.target.value },
-                          )
+                          handleUpdateFeature(activeFeature.id, {
+                            aiMode: e.target.value,
+                          })
                         }
                         className="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 appearance-none bg-white"
                       >
@@ -541,87 +541,28 @@ export function CMSPackageSetupModal({
                     </div>
                   </div>
 
-                  {/* Discount + Quantity */}
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-900 mb-2">
-                        Discount Percentage
-                      </label>
-                      <div className="relative">
-                        <input
-                          type="number"
-                          min="0"
-                          max="100"
-                          value={activeFeature.discount}
-                          onChange={(e) =>
-                            handleUpdateFeature(
-                              activeFeature.id,
-                              {
-                                discount: Number(e.target.value),
-                              },
-                            )
-                          }
-                          className="w-full px-4 py-3 pr-10 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
-                          placeholder="0"
-                        />
-                        <span className="absolute right-4 top-3.5 text-sm text-gray-500">
-                          %
-                        </span>
-                      </div>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-900 mb-2">
-                        Quantity
-                      </label>
-                      <div className="flex items-center gap-3">
-                        <button
-                          onClick={() =>
-                            handleUpdateFeature(
-                              activeFeature.id,
-                              {
-                                quantity: Math.max(
-                                  1,
-                                  activeFeature.quantity - 1,
-                                ),
-                              },
-                            )
-                          }
-                          className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                        >
-                          <Minus className="w-4 h-4 text-gray-600" />
-                        </button>
-                        <input
-                          type="number"
-                          min="1"
-                          value={activeFeature.quantity}
-                          onChange={(e) =>
-                            handleUpdateFeature(
-                              activeFeature.id,
-                              {
-                                quantity: Math.max(
-                                  1,
-                                  Number(e.target.value),
-                                ),
-                              },
-                            )
-                          }
-                          className="w-20 px-4 py-2 text-center border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
-                        />
-                        <button
-                          onClick={() =>
-                            handleUpdateFeature(
-                              activeFeature.id,
-                              {
-                                quantity:
-                                  activeFeature.quantity + 1,
-                              },
-                            )
-                          }
-                          className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                        >
-                          <Plus className="w-4 h-4 text-gray-600" />
-                        </button>
-                      </div>
+                  {/* Discount */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
+                      Discount Percentage
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={activeFeature.discount}
+                        onChange={(e) =>
+                          handleUpdateFeature(activeFeature.id, {
+                            discount: Number(e.target.value),
+                          })
+                        }
+                        className="w-full px-4 py-3 pr-10 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+                        placeholder="0"
+                      />
+                      <span className="absolute right-4 top-3.5 text-sm text-gray-500">
+                        %
+                      </span>
                     </div>
                   </div>
 
@@ -632,18 +573,26 @@ export function CMSPackageSetupModal({
                         <div className="text-sm font-medium text-brand-900">
                           Setup Fee
                           {activeFeature.renewal && (
-                            <span className="ml-2 text-xs font-normal text-green-700">(waived with renewal)</span>
+                            <span className="ml-2 text-xs font-normal text-green-700">
+                              (waived with renewal)
+                            </span>
                           )}
                         </div>
                         {!activeFeature.renewal && (
                           <div className="text-xs text-brand-700 mt-1">
-                            ${(activeFeature.pricing[activeFeature.aiMode]?.setupFee ?? 0).toLocaleString()}{" "}
-                            × {activeFeature.quantity}
+                            $
+                            {(
+                              activeFeature.pricing[activeFeature.aiMode]
+                                ?.setupFee ?? 0
+                            ).toLocaleString()}
                           </div>
                         )}
                       </div>
                       <div className="text-xl font-bold text-brand-900">
-                        ${getFeaturePricing(activeFeature).setupFee.toLocaleString()}
+                        $
+                        {getFeaturePricing(
+                          activeFeature,
+                        ).setupFee.toLocaleString()}
                       </div>
                     </div>
                     <div className="border-t border-brand-200 pt-3 flex items-center justify-between">
@@ -652,14 +601,20 @@ export function CMSPackageSetupModal({
                           Annual Fee
                         </div>
                         <div className="text-xs text-brand-700 mt-1">
-                          ${(activeFeature.pricing[activeFeature.aiMode]?.annualFee ?? 0).toLocaleString()}{" "}
-                          × {activeFeature.quantity}
+                          $
+                          {(
+                            activeFeature.pricing[activeFeature.aiMode]
+                              ?.annualFee ?? 0
+                          ).toLocaleString()}
                           {activeFeature.discount > 0 &&
                             ` - ${activeFeature.discount}% discount`}
                         </div>
                       </div>
                       <div className="text-xl font-bold text-brand-900">
-                        ${getFeaturePricing(activeFeature).annualFee.toLocaleString()}
+                        $
+                        {getFeaturePricing(
+                          activeFeature,
+                        ).annualFee.toLocaleString()}
                       </div>
                     </div>
                     <div className="border-t border-brand-200 pt-3 flex items-center justify-between">
@@ -728,16 +683,18 @@ export function CMSPackageSetupModal({
                       >
                         <div className="flex items-start justify-between mb-2">
                           <div className="flex-1 min-w-0">
-                            <h4 className="font-medium text-sm text-gray-900 truncate">
-                              {feature.name}
-                            </h4>
-                            <div className="flex items-center gap-2 mt-1">
+                            <h4 className="flex items-center gap-2 w-full overflow-hidden">
+                              <span className="font-semibold text-sm text-gray-900 truncate">
+                                {feature.name}
+                              </span>
                               {feature.renewal && (
-                                <span className="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-green-100 text-green-700">
-                                  <Check className="w-3 h-3 mr-0.5" />
+                                <span className="flex-shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-700 border border-emerald-200">
+                                  <Check className="w-2.5 h-2.5 mr-0.5" />
                                   Renewal
                                 </span>
                               )}
+                            </h4>
+                            <div className="flex items-center gap-2 mt-1">
                               {feature.discount > 0 && (
                                 <span className="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-orange-100 text-orange-700">
                                   -{feature.discount}%
@@ -746,9 +703,7 @@ export function CMSPackageSetupModal({
                             </div>
                           </div>
                           <button
-                            onClick={() =>
-                              handleRemoveFeature(feature.id)
-                            }
+                            onClick={() => handleRemoveFeature(feature.id)}
                             className="p-1 hover:bg-gray-100 rounded transition-colors"
                           >
                             <Trash2 className="w-3.5 h-3.5 text-red-500" />
@@ -756,29 +711,29 @@ export function CMSPackageSetupModal({
                         </div>
                         <div className="space-y-1 text-xs">
                           <div className="flex items-center justify-between">
-                            <span className="text-gray-600">
-                              Qty: {feature.quantity} · Setup
-                            </span>
+                            <span className="text-gray-600">Setup</span>
                             <span className="font-medium text-gray-700">
-                              ${getFeaturePricing(feature).setupFee.toLocaleString()}
+                              $
+                              {getFeaturePricing(
+                                feature,
+                              ).setupFee.toLocaleString()}
                             </span>
                           </div>
                           <div className="flex items-center justify-between">
-                            <span className="text-gray-600">
-                              Qty: {feature.quantity} · Annual
-                            </span>
+                            <span className="text-gray-600">Annual</span>
                             <span className="font-medium text-gray-700">
-                              ${getFeaturePricing(feature).annualFee.toLocaleString()}
+                              $
+                              {getFeaturePricing(
+                                feature,
+                              ).annualFee.toLocaleString()}
                             </span>
                           </div>
-                          <div className="flex items-center justify-between border-t border-gray-100 pt-1">
-                            <span className="text-gray-600">
-                              Subtotal
-                            </span>
+                          {/* <div className="flex items-center justify-between border-t border-gray-100 pt-1">
+                            <span className="text-gray-600">Subtotal</span>
                             <span className="font-semibold text-gray-900">
                               ${calculateFeaturePrice(feature).toLocaleString()}
                             </span>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                     ))
@@ -793,17 +748,13 @@ export function CMSPackageSetupModal({
                 </h4> */}
                 <div className="space-y-2.5">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-600">
-                      Setup Fees
-                    </span>
+                    <span className="text-gray-600">Setup Fees</span>
                     <span className="font-medium text-gray-900">
                       ${totalFeatureSetup.toLocaleString()}
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-600">
-                      Annual Payment
-                    </span>
+                    <span className="text-gray-600">Annual Payment</span>
                     <span className="font-medium text-gray-900">
                       ${annualPayment.toLocaleString()}
                     </span>
@@ -838,6 +789,21 @@ export function CMSPackageSetupModal({
                       </div>
                     </>
                   )}
+                  {packageQuantity > 1 && (
+                    <div className="border-t border-gray-200 pt-2.5">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-gray-600">Per Package</span>
+                        <span className="font-medium text-gray-900">
+                          ${packageSubtotal.toLocaleString()}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between text-sm mt-1">
+                        <span className="text-gray-600">
+                          × {packageQuantity} packages
+                        </span>
+                      </div>
+                    </div>
+                  )}
                   <div className="border-t border-gray-300 pt-2.5 mt-2.5">
                     <div className="flex items-center justify-between">
                       <span className="font-semibold text-gray-900">
@@ -865,9 +831,7 @@ export function CMSPackageSetupModal({
             </button>
             <div className="flex items-center gap-4">
               <div className="text-right">
-                <div className="text-xs text-gray-600">
-                  First Payment
-                </div>
+                <div className="text-xs text-gray-600">First Payment</div>
                 <div className="text-lg font-bold text-gray-900">
                   ${grandTotal.toLocaleString()}
                 </div>
