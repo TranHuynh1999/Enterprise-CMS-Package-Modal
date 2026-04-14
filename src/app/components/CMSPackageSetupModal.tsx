@@ -934,12 +934,12 @@ export function CMSPackageSetupModal({ onClose }: { onClose: () => void }) {
               Cancel
             </button>
             <div className="flex items-center gap-4">
-              <div className="text-right">
+              {/* <div className="text-right">
                 <div className="text-xs text-gray-600">First Payment</div>
                 <div className="text-lg font-bold text-gray-900">
                   ${grandTotal.toLocaleString()}
                 </div>
-              </div>
+              </div> */}
               <button
                 onClick={() => {
                   console.log("Package saved:", {
