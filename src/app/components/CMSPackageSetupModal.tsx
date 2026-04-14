@@ -20,6 +20,12 @@ interface ModePricing {
   annualFee: number;
 }
 
+interface Promo {
+  description: string;
+  setupFeeDiscount: number;
+  annualFeeDiscount: number;
+}
+
 interface Feature {
   id: string;
   name: string;
@@ -27,6 +33,7 @@ interface Feature {
   pricing: Record<string, ModePricing>;
   icon: string;
   category: string;
+  promo?: Promo;
 }
 
 interface SelectedFeature extends Feature {
@@ -49,6 +56,12 @@ const FEATURES: Feature[] = [
     },
     icon: "server",
     category: "i3Host",
+    promo: {
+      description:
+        "i3Host Promo: 1st year FREE - Setup Fee 100% off until June 1, 2026",
+      setupFeeDiscount: 100,
+      annualFeeDiscount: 100,
+    },
   },
   {
     id: "vsc",
@@ -204,9 +217,13 @@ export function CMSPackageSetupModal({ onClose }: { onClose: () => void }) {
 
   const getFeaturePricing = (feature: SelectedFeature) => {
     const pricing = feature.pricing[feature.aiMode] ?? feature.pricing["i3Ai"];
-    const setupFee = feature.renewal ? 0 : pricing.setupFee;
-    const annualWithDiscount = pricing.annualFee * (1 - feature.discount / 100);
-    const annualFee = annualWithDiscount;
+    const promoSetup = feature.promo?.setupFeeDiscount ?? 0;
+    const promoAnnual = feature.promo?.annualFeeDiscount ?? 0;
+    const setupFee = feature.renewal
+      ? 0
+      : pricing.setupFee * (1 - promoSetup / 100);
+    const annualFee =
+      pricing.annualFee * (1 - feature.discount / 100) * (1 - promoAnnual / 100);
     return {
       setupFee,
       annualFee,
@@ -244,6 +261,33 @@ export function CMSPackageSetupModal({ onClose }: { onClose: () => void }) {
       categoryFilter === "All" || f.category === categoryFilter;
     return matchesSearch && matchesCategory;
   });
+
+  const allFilteredSelected =
+    filteredFeatures.length > 0 &&
+    filteredFeatures.every((f) => selectedFeatures.some((s) => s.id === f.id));
+
+  const handleToggleAll = () => {
+    if (allFilteredSelected) {
+      const filteredIds = new Set(filteredFeatures.map((f) => f.id));
+      setSelectedFeatures(selectedFeatures.filter((f) => !filteredIds.has(f.id)));
+      if (activeFeatureId && filteredIds.has(activeFeatureId)) {
+        setActiveFeatureId(null);
+      }
+    } else {
+      const existing = new Set(selectedFeatures.map((f) => f.id));
+      const newFeatures: SelectedFeature[] = filteredFeatures
+        .filter((f) => !existing.has(f.id))
+        .map((f) => ({
+          ...f,
+          renewal: false,
+          aiMode: "i3Ai",
+          discount: 0,
+          quantity: 1,
+          notes: "",
+        }));
+      setSelectedFeatures([...selectedFeatures, ...newFeatures]);
+    }
+  };
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
@@ -380,6 +424,17 @@ export function CMSPackageSetupModal({ onClose }: { onClose: () => void }) {
                 ))}
               </div>
             </div>
+            <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200 bg-gray-50">
+              <span className="text-xs text-gray-500">
+                {filteredFeatures.length} feature{filteredFeatures.length !== 1 ? "s" : ""}
+              </span>
+              <button
+                onClick={handleToggleAll}
+                className="text-xs font-medium text-brand-600 hover:text-brand-800 transition-colors"
+              >
+                {allFilteredSelected ? "Unselect All" : "Select All"}
+              </button>
+            </div>
 
             <div className="flex-1 overflow-y-auto p-3 space-y-2">
               {filteredFeatures.map((feature) => {
@@ -432,6 +487,12 @@ export function CMSPackageSetupModal({ onClose }: { onClose: () => void }) {
                         <p className="text-xs text-gray-600 mb-2 line-clamp-2">
                           {feature.description}
                         </p>
+                        {feature.promo && (
+                          <div className="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-green-50 border border-green-200 text-[11px] font-medium text-green-700">
+                            <Zap className="w-3 h-3" />
+                            {feature.name} Promo
+                          </div>
+                        )}
                         {/* <div className="inline-flex items-center px-2 py-0.5 rounded-md bg-gray-100 text-xs font-medium text-gray-700">
                           ${feature.basePrice.toLocaleString()}
                         </div> */}
@@ -481,6 +542,14 @@ export function CMSPackageSetupModal({ onClose }: { onClose: () => void }) {
                   <p className="text-sm text-gray-600">
                     {activeFeature.description}
                   </p>
+                  {activeFeature.promo && (
+                    <div className="mt-3 flex items-start gap-2 px-4 py-3 bg-green-50 border border-green-200 rounded-xl">
+                      <Zap className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                      <span className="text-sm font-medium text-green-800">
+                        {activeFeature.promo.description}
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="space-y-4">
@@ -581,11 +650,18 @@ export function CMSPackageSetupModal({ onClose }: { onClose: () => void }) {
                         </div>
                         {!activeFeature.renewal && (
                           <div className="text-xs text-brand-700 mt-1">
-                            $
-                            {(
-                              activeFeature.pricing[activeFeature.aiMode]
-                                ?.setupFee ?? 0
-                            ).toLocaleString()}
+                            <span className={activeFeature.promo?.setupFeeDiscount ? "line-through text-gray-400" : ""}>
+                              $
+                              {(
+                                activeFeature.pricing[activeFeature.aiMode]
+                                  ?.setupFee ?? 0
+                              ).toLocaleString()}
+                            </span>
+                            {!!activeFeature.promo?.setupFeeDiscount && (
+                              <span className="ml-1 text-green-600">
+                                ({activeFeature.promo.setupFeeDiscount}% promo)
+                              </span>
+                            )}
                           </div>
                         )}
                       </div>
@@ -602,13 +678,20 @@ export function CMSPackageSetupModal({ onClose }: { onClose: () => void }) {
                           Annual Fee
                         </div>
                         <div className="text-xs text-brand-700 mt-1">
-                          $
-                          {(
-                            activeFeature.pricing[activeFeature.aiMode]
-                              ?.annualFee ?? 0
-                          ).toLocaleString()}
+                          <span className={activeFeature.promo?.annualFeeDiscount ? "line-through text-gray-400" : ""}>
+                            $
+                            {(
+                              activeFeature.pricing[activeFeature.aiMode]
+                                ?.annualFee ?? 0
+                            ).toLocaleString()}
+                          </span>
                           {activeFeature.discount > 0 &&
                             ` - ${activeFeature.discount}% discount`}
+                          {!!activeFeature.promo?.annualFeeDiscount && (
+                            <span className="ml-1 text-green-600">
+                              ({activeFeature.promo.annualFeeDiscount}% promo)
+                            </span>
+                          )}
                         </div>
                       </div>
                       <div className="text-xl font-bold text-brand-900">
@@ -676,10 +759,11 @@ export function CMSPackageSetupModal({ onClose }: { onClose: () => void }) {
                     selectedFeatures.map((feature) => (
                       <div
                         key={feature.id}
-                        className={`bg-white rounded-lg p-3 border-2 transition-all ${
+                        onClick={() => setActiveFeatureId(feature.id)}
+                        className={`bg-white rounded-lg p-3 border-2 transition-all cursor-pointer ${
                           activeFeatureId === feature.id
                             ? "border-brand-500 shadow-sm"
-                            : "border-gray-200"
+                            : "border-gray-200 hover:border-gray-300"
                         }`}
                       >
                         <div className="flex items-start justify-between mb-2">
@@ -738,6 +822,14 @@ export function CMSPackageSetupModal({ onClose }: { onClose: () => void }) {
                               ).annualFee.toLocaleString()}
                             </span>
                           </div>
+                          {feature.promo && (
+                            <div className="flex items-center gap-1 mt-1">
+                              <Zap className="w-3 h-3 text-green-600" />
+                              <span className="text-[10px] font-medium text-green-700">
+                                Promo applied
+                              </span>
+                            </div>
+                          )}
                           {/* <div className="flex items-center justify-between border-t border-gray-100 pt-1">
                             <span className="text-gray-600">Subtotal</span>
                             <span className="font-semibold text-gray-900">
