@@ -734,7 +734,7 @@ export function CMSPackageSetupModal({ onClose }: { onClose: () => void }) {
           </div>
 
           {/* Right Panel - Package Summary */}
-          <div className="w-[28%] border-l border-gray-200 bg-gray-50 flex flex-col overflow-y-auto">
+          <div className="w-[28%] border-l border-gray-200 bg-gray-50 flex flex-col">
             <div className="p-4 border-b border-gray-200 bg-white">
               <h3 className="font-semibold text-gray-900 flex items-center gap-2">
                 <ShoppingCart className="w-4 h-4" />
@@ -742,7 +742,7 @@ export function CMSPackageSetupModal({ onClose }: { onClose: () => void }) {
               </h3>
             </div>
 
-            <div className="flex-1 p-4 space-y-4">
+            <div className="flex-1 overflow-y-auto p-4">
               {/* Selected Features */}
               <div>
                 <div className="text-xs font-medium text-gray-600 mb-2 uppercase tracking-wide">
@@ -842,8 +842,10 @@ export function CMSPackageSetupModal({ onClose }: { onClose: () => void }) {
                   )}
                 </div>
               </div>
+            </div>
 
-              {/* Pricing Breakdown */}
+            {/* Pricing Breakdown - pinned to bottom */}
+            <div className="border-t border-gray-200 p-4 bg-gray-50 flex-shrink-0">
               <div className="bg-white rounded-xl p-5 border-l-4 border-l-brand-500 border border-gray-200 shadow-md">
                 {/* <h4 className="font-semibold text-sm text-gray-900 mb-3">
                   Pricing Breakdown
